@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "../VestingWallet.sol";
-import "../registry/VestingRegistryBase.sol";
+
 import "../registry/VestingRegistry.sol";
 
 contract VestingWalletFactory {
