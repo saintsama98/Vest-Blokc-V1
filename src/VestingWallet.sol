@@ -6,11 +6,11 @@ import "@openzeppelin/contracts/finance/VestingWalletCliff.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
-/// @title VestingWalletFullCustom
-/// @notice Combines linear and cliff vesting logic in one contract
-/// @dev Inherits from VestingWalletCliff (which itself inherits VestingWallet)
+/// @title VestingWalletFullCustomFacet
+/// @notice Combines linear and cliff vesting logic for Diamond architecture
+contract VestingWalletFullCustomFacet is VestingWalletCliff {
+    event VestingRevoked(address indexed token, address indexed owner, uint256 unvestedAmount);
 
-contract VestingWalletFullCustom is VestingWalletCliff {
     constructor(
         address beneficiary,
         uint64 startTimestamp,
@@ -21,18 +21,11 @@ contract VestingWalletFullCustom is VestingWalletCliff {
         VestingWalletCliff(cliffDuration)
     {}
 
-    /// @notice Delegate voting power of ERC20Votes tokens held by this contract
-    /// @dev Only callable by the beneficiary
-
     function delegate(address token, address delegatee) external {
         require(delegatee != address(0), "Invalid delegatee");
-        // Only owner can delegate
         require(msg.sender == owner(), "Not owner");
         ERC20Votes(token).delegate(delegatee);
     }
-
-    /// @notice Revoke vesting and return unvested tokens to the owner
-    /// @dev Only callable by the owner
 
     function revoke(address token, address owner) external {
         require(msg.sender == owner, "Not owner");
@@ -42,6 +35,6 @@ contract VestingWalletFullCustom is VestingWalletCliff {
         if (unvestedAmount > 0) {
             IERC20(token).transfer(owner, unvestedAmount);
         }
-        // Optionally, emit an event for revocation
+        emit VestingRevoked(token, owner, unvestedAmount);
     }
 }
