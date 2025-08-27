@@ -5,7 +5,7 @@ pragma solidity ^0.8.20;
 
     @title Vesting Wallet Factory
     @author BLOK Capital DAO
-    @notice This contract implements logic for Vesting Wallet Factory
+    @notice This contract implements logic for Vesting Wallet Factory which helps deploy vesting wallets
 
     ▗▄▄▖ ▗▖    ▗▄▖ ▗▖ ▗▖     ▗▄▄▖ ▗▄▖ ▗▄▄▖▗▄▄▄▖▗▄▄▄▖▗▄▖ ▗▖       ▗▄▄▄  ▗▄▖  ▗▄▖ 
     ▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌▗▞▘    ▐▌   ▐▌ ▐▌▐▌ ▐▌ █    █ ▐▌ ▐▌▐▌       ▐▌  █▐▌ ▐▌▐▌ ▐▌
@@ -46,14 +46,14 @@ contract VestingWalletFactory {
 
     /// @notice Retrieves the vesting wallets for a specific user
     /// @param user The address of the user
-    /// @return An array of vesting wallet addresses
+    /// @return array of vesting wallet addresses
 
     function getUserVestings(address user) external view returns (address[] memory) {
         return userVestings[user];
     }
 
     /// @notice Retrieves all vesting wallets
-    /// @return An array of all vesting wallet addresses
+    /// @return array of all vesting wallet addresses
 
     function getAllVestings() external view returns (address[] memory) {
         return allVestings;

@@ -3,9 +3,9 @@ pragma solidity ^0.8.20;
 
 /*###############################################################################
 
-    @title Vesting Wallet test
+    @title Mock ERC20 Votes
     @author BLOK Capital DAO
-    @notice This contract implements logic for Vesting Wallet testing
+    @notice This contract implements logic for a mock ERC20 token with voting capabilities
 
     ▗▄▄▖ ▗▖    ▗▄▖ ▗▖ ▗▖     ▗▄▄▖ ▗▄▖ ▗▄▄▖▗▄▄▄▖▗▄▄▄▖▗▄▖ ▗▖       ▗▄▄▄  ▗▄▖  ▗▄▖ 
     ▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌▗▞▘    ▐▌   ▐▌ ▐▌▐▌ ▐▌ █    █ ▐▌ ▐▌▐▌       ▐▌  █▐▌ ▐▌▐▌ ▐▌

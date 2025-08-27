@@ -18,7 +18,7 @@ pragma solidity ^0.8.20;
 import "forge-std/Test.sol";
 import "../src/factory/VestingWalletFactory.sol";
 import "../src/VestingWallet.sol";
-import "./MockERC20Votes.sol";
+import "./mocks/MockERC20Votes.sol";
 
 contract VestingSystemTest is Test {
     VestingWalletFactory factory;
