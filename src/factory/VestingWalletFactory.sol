@@ -25,18 +25,22 @@ contract VestingWalletFactory {
     event VestingWalletCreated(address wallet, address beneficiary);
     event VestingRegistered(address indexed user, address vestingWallet);
 
-    /// @notice Creates a new vesting wallet or treat it as a simple factory to deploy wallets
+    /// @notice Creates a new vesting wallet with both owner and beneficiary
+    /// @param owner The address of the owner
     /// @param beneficiary The address of the beneficiary
     /// @param start The start time of the vesting
     /// @param duration The duration of the vesting
     /// @param cliffDuration The cliff duration of the vesting
     /// @return The address of the newly created vesting wallet
 
-    function createVestingWallet(address beneficiary, uint64 start, uint64 duration, uint64 cliffDuration)
-        external
-        returns (address)
-    {
-        VestingWallet wallet = new VestingWallet(beneficiary, start, duration);
+    function createVestingWallet(
+        address owner,
+        address beneficiary,
+        uint64 start,
+        uint64 duration,
+        uint64 cliffDuration
+    ) external returns (address) {
+        VestingWalletBlokc wallet = new VestingWalletBlokc(owner, beneficiary, start, duration, cliffDuration);
         userVestings[msg.sender].push(address(wallet));
         allVestings.push(address(wallet));
         emit VestingWalletCreated(address(wallet), beneficiary);

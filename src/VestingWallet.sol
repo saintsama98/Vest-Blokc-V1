@@ -25,37 +25,27 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 contract VestingWalletBlokc is VestingWalletCliff {
     event VestingRevoked(address indexed token, address indexed owner, uint256 unvestedAmount);
 
-    constructor(address beneficiary, uint64 startTimestamp, uint64 durationSeconds, uint64 cliffDuration)
+    constructor(address owner, address beneficiary, uint64 startTimestamp, uint64 durationSeconds, uint64 cliffDuration)
         VestingWallet(beneficiary, startTimestamp, durationSeconds)
         VestingWalletCliff(cliffDuration)
     {}
-    /// @notice Any beneficiary can call this function
 
+    /// @notice Only beneficiary can call this function
     function delegate(address token, address delegatee) external {
         require(delegatee != address(0), "Invalid delegatee");
-
-        /// @dev Only if the caller is the owner then:
-        /// require(msg.sender == owner(), "Not owner");
-
         ERC20Votes(token).delegate(delegatee);
     }
 
-    /// @notice Revokes the vesting for a specific token
-    /// @param token The address of the token
-    /// @param owner The address of the owner
-
-    function revoke(address token, address owner) external {
-        require(msg.sender == owner, "Not owner");
+    /// @notice Only owner (DAO or designated address) can revoke
+    /// To set DAO as owner, call transferOwnership(daoAddress) after deployment
+    function revoke(address token) external {
+        require(msg.sender == owner(), "Not owner");
         uint256 totalAmount = IERC20(token).balanceOf(address(this));
-
-        /// @dev Calculate the vested amount
         uint256 vestedAmount = vestedAmount(uint64(block.timestamp));
-
-        /// @dev Calculate the unvested amount
         uint256 unvestedAmount = totalAmount - vestedAmount;
         if (unvestedAmount > 0) {
-            IERC20(token).transfer(owner, unvestedAmount);
+            IERC20(token).transfer(owner(), unvestedAmount);
         }
-        emit VestingRevoked(token, owner, unvestedAmount);
+        emit VestingRevoked(token, owner(), unvestedAmount);
     }
 }
