@@ -27,20 +27,12 @@ contract MockERC20Votes is ERC20, ERC20Permit, ERC20Votes {
     }
 
     // Required override for OpenZeppelin v5.x
-    function _update(address from, address to, uint256 value)
-        internal
-        override(ERC20, ERC20Votes)
-    {
+    function _update(address from, address to, uint256 value) internal override(ERC20, ERC20Votes) {
         super._update(from, to, value);
     }
 
     // Explicit override to resolve multiple inheritance ambiguity
-    function nonces(address owner)
-        public
-        view
-        override(ERC20Permit, Nonces)
-        returns (uint256)
-    {
+    function nonces(address owner) public view override(ERC20Permit, Nonces) returns (uint256) {
         return super.nonces(owner);
     }
 }

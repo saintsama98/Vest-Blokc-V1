@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-
 /*###############################################################################
 
     @title Vesting Wallet test
@@ -16,14 +15,13 @@ pragma solidity ^0.8.20;
 
 ################################################################################*/
 
-
 import "forge-std/Test.sol";
-import "../src/factory/VestingWalletManager.sol";
+import "../src/factory/VestingWalletFactory.sol";
 import "../src/VestingWallet.sol";
 import "./MockERC20Votes.sol";
 
 contract VestingSystemTest is Test {
-    VestingWalletManager manager;
+    VestingWalletFactory factory;
     address user = address(0x1);
     address beneficiary = address(0x2);
     uint64 start = uint64(block.timestamp + 1 days);
@@ -31,15 +29,15 @@ contract VestingSystemTest is Test {
     uint64 cliff = 7 days;
 
     function setUp() public {
-        manager = new VestingWalletManager();
+        factory = new VestingWalletFactory();
     }
 
     /// @notice Tests the creation of a vesting wallet and its registration
 
     function testFactoryCreatesVestingWalletAndRegisters() public {
         vm.prank(user);
-        address walletAddr = manager.createVestingWallet(beneficiary, start, duration, cliff);
-        address[] memory userWallets = manager.getUserVestings(user);
+        address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
+        address[] memory userWallets = factory.getUserVestings(user);
         assertEq(userWallets.length, 1);
         assertEq(userWallets[0], walletAddr);
     }
@@ -48,7 +46,7 @@ contract VestingSystemTest is Test {
 
     function testVestingWalletDelegateAndRevoke() public {
         vm.prank(user);
-        address walletAddr = manager.createVestingWallet(beneficiary, start, duration, cliff);
+        address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
         VestingWalletBlokc wallet = VestingWalletBlokc(payable(walletAddr));
         MockERC20Votes token = new MockERC20Votes();
         // Mint tokens to vesting wallet
@@ -68,8 +66,8 @@ contract VestingSystemTest is Test {
 
     function testRegistryGlobalList() public {
         vm.prank(user);
-        address walletAddr = manager.createVestingWallet(beneficiary, start, duration, cliff);
-        address[] memory allWallets = manager.getAllVestings();
+        address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
+        address[] memory allWallets = factory.getAllVestings();
         assertEq(allWallets.length, 1);
         assertEq(allWallets[0], walletAddr);
     }

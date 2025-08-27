@@ -3,9 +3,9 @@ pragma solidity ^0.8.20;
 
 /*###############################################################################
 
-    @title Vesting Wallet Manager
+    @title Vesting Wallet Factory
     @author BLOK Capital DAO
-    @notice This contract implements logic for Vesting Wallet Management
+    @notice This contract implements logic for Vesting Wallet Factory
 
     ▗▄▄▖ ▗▖    ▗▄▖ ▗▖ ▗▖     ▗▄▄▖ ▗▄▖ ▗▄▄▖▗▄▄▄▖▗▄▄▄▖▗▄▖ ▗▖       ▗▄▄▄  ▗▄▖  ▗▄▖ 
     ▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌▗▞▘    ▐▌   ▐▌ ▐▌▐▌ ▐▌ █    █ ▐▌ ▐▌▐▌       ▐▌  █▐▌ ▐▌▐▌ ▐▌
@@ -17,7 +17,7 @@ pragma solidity ^0.8.20;
 
 import "../VestingWallet.sol";
 
-contract VestingWalletManager {
+contract VestingWalletFactory {
     // Registry storage
     mapping(address => address[]) internal userVestings;
     address[] internal allVestings;
@@ -31,18 +31,12 @@ contract VestingWalletManager {
     /// @param duration The duration of the vesting
     /// @param cliffDuration The cliff duration of the vesting
     /// @return The address of the newly created vesting wallet
-    
-    function createVestingWallet(
-        address beneficiary,
-        uint64 start,
-        uint64 duration,
-        uint64 cliffDuration
-    ) external returns (address) {
-        VestingWallet wallet = new VestingWallet(
-            beneficiary,
-            start,
-            duration
-        );
+
+    function createVestingWallet(address beneficiary, uint64 start, uint64 duration, uint64 cliffDuration)
+        external
+        returns (address)
+    {
+        VestingWallet wallet = new VestingWallet(beneficiary, start, duration);
         userVestings[msg.sender].push(address(wallet));
         allVestings.push(address(wallet));
         emit VestingWalletCreated(address(wallet), beneficiary);

@@ -15,7 +15,6 @@ pragma solidity ^0.8.20;
 
 ################################################################################*/
 
-
 import "@openzeppelin/contracts/finance/VestingWallet.sol";
 import "@openzeppelin/contracts/finance/VestingWalletCliff.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -26,16 +25,12 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 contract VestingWalletBlokc is VestingWalletCliff {
     event VestingRevoked(address indexed token, address indexed owner, uint256 unvestedAmount);
 
-    constructor(
-        address beneficiary,
-        uint64 startTimestamp,
-        uint64 durationSeconds,
-        uint64 cliffDuration
-    )
+    constructor(address beneficiary, uint64 startTimestamp, uint64 durationSeconds, uint64 cliffDuration)
         VestingWallet(beneficiary, startTimestamp, durationSeconds)
         VestingWalletCliff(cliffDuration)
     {}
     //DAO calls this function
+
     function delegate(address token, address delegatee) external {
         require(delegatee != address(0), "Invalid delegatee");
 
