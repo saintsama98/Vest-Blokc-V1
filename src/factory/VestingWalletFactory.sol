@@ -65,10 +65,10 @@ contract VestingWalletFactory {
     }
 
     /// @notice Creates a new vesting wallet, assigns it to the beneficiary along with the registry creation
-    /// @param beneficiary The address of the beneficiary
-    /// @param start The start time of the vesting
-    /// @param duration The duration of the vesting
-    /// @param cliffDuration The cliff duration of the vesting
+    /// @param beneficiary The address of the beneficiary, the DAO user basically 
+    /// @param start The start time of the vesting, time where actual vesting period initiates
+    /// @param duration The duration of the vesting, time over which tokens will be vested
+    /// @param cliffDuration The cliff duration of the vesting, where cliff is nothing but how long after the tokens will be received back from the DAO
     /// @return The address of the newly created vesting wallet
 
     function createVestingWallet(address beneficiary, uint64 start, uint64 duration, uint64 cliffDuration)

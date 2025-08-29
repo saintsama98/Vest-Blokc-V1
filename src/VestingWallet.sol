@@ -55,7 +55,7 @@ contract VestingWalletBlokc is VestingWalletCliff {
     /// @param dao_ The address of the DAO or the owner which has access to specefic functions like revoke in this contract
     /// @param beneficiary_ The address of the beneficiary or DAO user who gets the vested tokens
     /// @param startTimestamp The start time of the vesting
-    /// @param durationSeconds The duration of the vesting
+    /// @param durationSeconds The duration of the vesting, in solidity the duration standard is calculated in seconds
 
     constructor(address dao_, address beneficiary_, uint64 startTimestamp, uint64 durationSeconds, uint64 cliffDuration)
         /// @notice Initializes the vesting wallet that is inherited from oppenzeppelin standards with certain params
@@ -74,6 +74,7 @@ contract VestingWalletBlokc is VestingWalletCliff {
 
     /// @notice Only beneficiary can call this function
     /// @param token The address of the ERC20Votes token to delegate
+    
     function delegate(address token, address delegatee) external {
         require(delegatee != address(0), "Invalid delegatee");
         ERC20Votes(token).delegate(delegatee);
