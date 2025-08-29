@@ -37,51 +37,51 @@ contract VestingSystemTest is Test {
     /// @notice Tests the creation of a vesting wallet and its registration
 
     function testFactoryCreatesVestingWalletAndRegisters() public {
-    vm.prank(beneficiary);
-    address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
-    // Registry functions are owner-only, so use DAO
-    vm.prank(DAO);
-    address[] memory userWallets = factory.getUserVestings(beneficiary);
-    assertEq(userWallets.length, 1);
-    assertEq(userWallets[0], walletAddr);
+        vm.prank(beneficiary);
+        address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
+        // Registry functions are owner-only, so use DAO
+        vm.prank(DAO);
+        address[] memory userWallets = factory.getUserVestings(beneficiary);
+        assertEq(userWallets.length, 1);
+        assertEq(userWallets[0], walletAddr);
     }
 
     /// @notice Tests the delegation and revocation of tokens in a vesting wallet
 
     function testVestingWalletDelegateAndRevoke() public {
-    vm.prank(beneficiary);
-    address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
-    VestingWalletBlokc wallet = VestingWalletBlokc(payable(walletAddr));
-    MockERC20Votes token = new MockERC20Votes();
-    // Mint tokens to vesting wallet
-    token.mint(address(wallet), 1000 ether);
-    // Test delegate (only beneficiary can call)
-    vm.prank(beneficiary);
-    wallet.delegate(address(token), beneficiary);
-    assertEq(token.delegates(address(wallet)), beneficiary);
-    // Test revoke fails if not allowed
-    vm.prank(DAO);
-    vm.expectRevert();
-    wallet.revoke(address(token));
-    // Enable revoke
-    vm.prank(DAO);
-    wallet.setRevokeAllowed(true);
-    // Now revoke should succeed
-    vm.prank(DAO);
-    wallet.revoke(address(token));
-    // After revoke, unvested tokens should be transferred to DAO
-    assertEq(token.balanceOf(DAO), 1000 ether);
+        vm.prank(beneficiary);
+        address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
+        VestingWalletBlokc wallet = VestingWalletBlokc(payable(walletAddr));
+        MockERC20Votes token = new MockERC20Votes();
+        // Mint tokens to vesting wallet
+        token.mint(address(wallet), 1000 ether);
+        // Test delegate (only beneficiary can call)
+        vm.prank(beneficiary);
+        wallet.delegate(address(token), beneficiary);
+        assertEq(token.delegates(address(wallet)), beneficiary);
+        // Test revoke fails if not allowed
+        vm.prank(DAO);
+        vm.expectRevert();
+        wallet.revoke(address(token));
+        // Enable revoke
+        vm.prank(DAO);
+        wallet.setRevokeAllowed(true);
+        // Now revoke should succeed
+        vm.prank(DAO);
+        wallet.revoke(address(token));
+        // After revoke, unvested tokens should be transferred to DAO
+        assertEq(token.balanceOf(DAO), 1000 ether);
     }
 
     /// @notice Tests the retrieval of vesting wallets for a specific user
 
     function testRegistryGlobalList() public {
-    vm.prank(beneficiary);
-    address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
-    // Registry functions are owner-only, so use DAO
-    vm.prank(DAO);
-    address[] memory allWallets = factory.getAllVestings();
-    assertEq(allWallets.length, 1);
-    assertEq(allWallets[0], walletAddr);
+        vm.prank(beneficiary);
+        address walletAddr = factory.createVestingWallet(beneficiary, start, duration, cliff);
+        // Registry functions are owner-only, so use DAO
+        vm.prank(DAO);
+        address[] memory allWallets = factory.getAllVestings();
+        assertEq(allWallets.length, 1);
+        assertEq(allWallets[0], walletAddr);
     }
 }

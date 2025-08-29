@@ -15,7 +15,6 @@ pragma solidity ^0.8.20;
 
 ################################################################################*/
 
-
 import "@openzeppelin/contracts/finance/VestingWallet.sol";
 import "@openzeppelin/contracts/finance/VestingWalletCliff.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -28,50 +27,40 @@ contract VestingWalletBlokc is VestingWalletCliff {
 
     /// @notice The address of the DAO
     /// DAO is the owner for specific functions like function revoke, revoke being called only by DAO and not beneficiary
-    
+
     address public dao;
-    
+
     /// @notice The address of the beneficiary, where beneficiary is the DAO user who will receive the vested tokens
-    
+
     address private _beneficiary;
 
     // Flag to control whether revoke is allowed for this wallet
     bool public revokeAllowed;
 
     /// @notice DAO can set whether revoke is allowed (to be triggered after vote off-chain)
-    
+
     function setRevokeAllowed(bool allowed) external onlyDAO {
         revokeAllowed = allowed;
     }
 
     /// @notice Only DAO can call certain functions, modifier allows access specifically to DAO
     /// @dev This modifier is used for all functions that should be restricted to the DAO
-    
+
     modifier onlyDAO() {
         require(msg.sender == dao, "Not DAO");
         _;
     }
 
-    
     /// @dev Initializes the vesting wallet with certain params
     /// @param dao_ The address of the DAO or the owner which has access to specefic functions like revoke in this contract
     /// @param beneficiary_ The address of the beneficiary or DAO user who gets the vested tokens
-    /// @param startTimestamp The start time of the vesting 
+    /// @param startTimestamp The start time of the vesting
     /// @param durationSeconds The duration of the vesting
-    
-    constructor(
-        address dao_,
-        address beneficiary_,
-        uint64 startTimestamp,
-        uint64 durationSeconds,
-        uint64 cliffDuration
-    )
-        /// @notice Initializes the vesting wallet that is inherited from oppenzeppelin standards with certain params
 
+    constructor(address dao_, address beneficiary_, uint64 startTimestamp, uint64 durationSeconds, uint64 cliffDuration)
+        /// @notice Initializes the vesting wallet that is inherited from oppenzeppelin standards with certain params
         VestingWallet(beneficiary_, startTimestamp, durationSeconds)
-        
         /// @notice Initializes the cliff duration for the vesting wallet
-        
         VestingWalletCliff(cliffDuration)
     {
         dao = dao_;

@@ -26,11 +26,12 @@ contract VestingWalletFactory {
     }
     /// @notice Allows the current DAO to update the DAO address
     /// @param newDAO The new DAO address
+
     function updateDAO(address newDAO) external onlyDAO {
         require(newDAO != address(0), "Invalid DAO address");
         dao = newDAO;
     }
-    
+
     /// @notice Restrict access to DAO-only functions using a modifier
     address public dao = 0x000000000000000000000000000000000000dEaD;
 
@@ -43,11 +44,10 @@ contract VestingWalletFactory {
     event VestingWalletCreated(address wallet, address beneficiary);
     event VestingRegistered(address indexed user, address vestingWallet);
 
-
     /// @notice Retrieves the vesting wallets for a specific user
     /// @param user The address of the user
     /// @return array of vesting wallet addresses
-    
+
     function getUserVestings(address user) external view returns (address[] memory) {
         return userVestings[user];
     }
@@ -65,18 +65,16 @@ contract VestingWalletFactory {
     }
 
     /// @notice Creates a new vesting wallet, assigns it to the beneficiary along with the registry creation
-    /// @param beneficiary The address of the beneficiary 
+    /// @param beneficiary The address of the beneficiary
     /// @param start The start time of the vesting
     /// @param duration The duration of the vesting
     /// @param cliffDuration The cliff duration of the vesting
     /// @return The address of the newly created vesting wallet
-    
-    function createVestingWallet(
-        address beneficiary,
-        uint64 start,
-        uint64 duration,
-        uint64 cliffDuration
-    ) external returns (address) {
+
+    function createVestingWallet(address beneficiary, uint64 start, uint64 duration, uint64 cliffDuration)
+        external
+        returns (address)
+    {
         // Deploy wallet with beneficiary as owner, DAO as special role for revoke
         VestingWalletBlokc wallet = new VestingWalletBlokc(dao, beneficiary, start, duration, cliffDuration);
         userVestings[beneficiary].push(address(wallet));
