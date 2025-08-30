@@ -65,7 +65,7 @@ contract VestingWalletFactory {
     }
 
     /// @notice Creates a new vesting wallet, assigns it to the beneficiary along with the registry creation
-    /// @param beneficiary The address of the beneficiary, the DAO user basically 
+    /// @param beneficiary The address of the beneficiary, the DAO user basically
     /// @param start The start time of the vesting, time where actual vesting period initiates
     /// @param duration The duration of the vesting, time over which tokens will be vested
     /// @param cliffDuration The cliff duration of the vesting, where cliff is nothing but how long after the tokens will be received back from the DAO

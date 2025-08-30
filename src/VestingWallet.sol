@@ -74,7 +74,7 @@ contract VestingWalletBlokc is VestingWalletCliff {
 
     /// @notice Only beneficiary can call this function
     /// @param token The address of the ERC20Votes token to delegate
-    
+
     function delegate(address token, address delegatee) external {
         require(delegatee != address(0), "Invalid delegatee");
         ERC20Votes(token).delegate(delegatee);
